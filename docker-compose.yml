@@ -1,0 +1,26 @@
+services:
+  web:
+    image: nexus404-web:1.0.0
+    build:
+      context: .
+    ports:
+      - "8080:8080"
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Production
+      - ASPNETCORE_URLS=http://+:8080
+      - ANALYSIS_SERVICE_URL=http://analyzer:5000
+    depends_on:
+      - analyzer
+    restart: always
+
+  analyzer:
+    image: nexus404-analyzer:1.0.0
+    build:
+      context: .
+    ports:
+      - "5000:5000"
+    environment:
+      - PYTHONUNBUFFERED=1
+      - ENVIRONMENT=production
+      - PORT=5000
+    restart: always
